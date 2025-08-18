@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Output runtime configuration for Heroku
+cat << EOF
+---
+default_process_types:
+  web: node mcp-auth-proxy/index.js
+  release: MCP_AUTH_PROXY_VERIFY_RELEASE=true PORT=3001 node mcp-auth-proxy/index.js
+addons: []
+config_vars: {}
+EOF
