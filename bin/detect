@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Detect MCP proxy applications
+# Check for mcp-proxy.yml configuration file or mcp-auth-proxy reference in app.json
+
+if [[ -f "mcp-proxy.yml" ]] || [[ -f "app.json" && $(grep -q "mcp-auth-proxy" app.json 2>/dev/null) ]]; then
+  echo "MCP Auth Proxy"
+  exit 0
+fi
+
+exit 1

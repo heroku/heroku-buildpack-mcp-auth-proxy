@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -e
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+
+echo "-----> Installing MCP Auth Proxy"
+
+# Source library functions (to be implemented)
+LIB_DIR="$(dirname $0)/../lib"
+# source "$LIB_DIR/version-resolver.sh"
+# source "$LIB_DIR/downloader.sh"
+# source "$LIB_DIR/installer.sh"
+
+# Placeholder for main build process
+echo "-----> Repository structure initialized"
+echo "-----> Awaiting implementation of version resolution, download, and installation logic"
+
+echo "-----> MCP Auth Proxy buildpack setup complete (placeholder)"
