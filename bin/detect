@@ -1,9 +1,21 @@
 #!/usr/bin/env bash
 
-# Detect MCP proxy applications
-# Check for mcp-proxy.yml configuration file or mcp-auth-proxy reference in app.json
+# Function to check if this is an MCP Auth Proxy app based on environment variables
+detect_mcp_auth_proxy() {
+  local indicator_vars=(
+    "MCP_AUTH_PROXY_REDIS_URL"
+    "IDENTITY_SERVER_URL"
+    "MCP_SERVER_URL"
+  )
+  for var in "${indicator_vars[@]}"; do
+    if [[ -n "${!var}" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
 
-if [[ -f "mcp-proxy.yml" ]] || [[ -f "app.json" && $(grep -q "mcp-auth-proxy" app.json 2>/dev/null) ]]; then
+if detect_mcp_auth_proxy; then
   echo "MCP Auth Proxy"
   exit 0
 fi
