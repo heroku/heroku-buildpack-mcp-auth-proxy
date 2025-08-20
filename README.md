@@ -23,14 +23,7 @@ git push heroku main
 
 Your app now includes the MCP Auth Proxy application in the `mcp-auth-proxy/` directory and is configured as your default web process.
 
-## Detection Logic
-
-The buildpack activates when it finds any of these core runtime configuration vars set:
-- `MCP_AUTH_PROXY_REDIS_URL`
-- `IDENTITY_SERVER_URL`
-- `MCP_SERVER_URL`
-
-If all three are unset, the buildpack skips the app entirely.
+See the [deployment instructions](https://github.com/heroku/mcp-remote-auth-proxy?tab=readme-ov-file#deployment) for the MCP Auth Proxy for further information.
 
 ## Version Control
 
