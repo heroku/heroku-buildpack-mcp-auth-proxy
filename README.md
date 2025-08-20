@@ -1,113 +1,64 @@
 # Heroku Buildpack: MCP Auth Proxy
 
-A standalone Heroku buildpack that downloads and installs the MCP (Model Context Protocol) Auth Proxy from releases, enabling flexible deployment and version management.
+A [Heroku Buildpack](https://devcenter.heroku.com/articles/buildpacks) that installs an OAuth proxy for remote MCP servers.
 
-## Overview
+Downloads and installs the [OAuth Proxy Remote MCP Servers](https://github.com/heroku/mcp-remote-auth-proxy) application during Heroku builds with independent version management.
 
-This buildpack provides a clean separation between application code and buildpack functionality by downloading the MCP auth proxy from the main repository releases. It supports multiple version pinning strategies and download methods.
-
-## Quick Start
-
-### 1. Detection
-
-The buildpack automatically detects MCP proxy applications by looking for:
-- `mcp-proxy.yml` configuration file
-- `app.json` containing `mcp-auth-proxy` reference
-
-### 2. Usage
-
-Add this buildpack to your Heroku app:
+## Quick Setup
 
 ```bash
+# Add the buildpack
 heroku buildpacks:set https://github.com/heroku/heroku-buildpack-mcp-auth-proxy
-```
 
-### 3. Version Configuration
-
-Specify the MCP proxy version in your `app.json`:
-
-```json
-{
-  "env": {
-    "MCP_PROXY_VERSION": "v1.2.3"
-  }
-}
-```
-
-Or use environment variables:
-
-```bash
+# Pin to a specific version (recommended)
 heroku config:set MCP_PROXY_VERSION=v1.2.3
+
+# Deploy
+git push heroku main
 ```
 
-## Configuration Options
+Your app now includes the MCP Auth Proxy application in the `mcp-auth-proxy/` directory.
 
-### Version Pinning
+## Detection Logic
 
-- `MCP_PROXY_VERSION`: Git tag, commit hash, or "latest" (default: "latest")
-- `MCP_PROXY_DOWNLOAD_METHOD`: "release", "git", or "url" (default: "release")
-- `MCP_PROXY_URL`: Direct download URL (for "url" method)
+The buildpack activates when it finds any of these core runtime configuration vars set:
+- `MCP_AUTH_PROXY_REDIS_URL`
+- `IDENTITY_SERVER_URL`
+- `MCP_SERVER_URL`
 
-### Version Resolution Precedence
+If all three are unset, the buildpack skips the app entirely.
 
-1. Environment variables (highest priority)
-2. `app.json` configuration
-3. "latest" default (lowest priority)
+## Version Control
 
-## Download Methods
-
-### Release Downloads (Default)
 ```bash
-heroku config:set MCP_PROXY_DOWNLOAD_METHOD=release
+# Release method
+# Pin to tested release versions
 heroku config:set MCP_PROXY_VERSION=v1.2.3
+# Test latest stable release
+heroku config:set MCP_PROXY_VERSION=latest
+
+# Git Clone method
+# Use a feature branch
+heroku config:set MCP_PROXY_DOWNLOAD_METHOD=git MCP_PROXY_GIT_REF=feature-auth-v2
+# Use a specific commit
+heroku config:set MCP_PROXY_DOWNLOAD_METHOD=git MCP_PROXY_GIT_REF=abc123def
+# Use a git tag
+heroku config:set MCP_PROXY_DOWNLOAD_METHOD=git MCP_PROXY_GIT_REF=v2.0.0-beta
 ```
+> [!NOTE]
+> - `MCP_PROXY_DOWNLOAD_METHOD` defaults to `release`
+> - `MCP_PROXY_VERSION` defaults to `latest` (the most recent stable release)
+> - `MCP_PROXY_GIT_REF` defaults to `main` (if using the `git` download method)
 
-### Git Cloning
-```bash
-heroku config:set MCP_PROXY_DOWNLOAD_METHOD=git
-heroku config:set MCP_PROXY_VERSION=main
-```
+## Application Installation
 
-### Custom URL
-```bash
-heroku config:set MCP_PROXY_DOWNLOAD_METHOD=url
-heroku config:set MCP_PROXY_URL=https://example.com/custom-build.tar.gz
-```
+The buildpack installs the MCP Auth Proxy (Node) application to `/app/mcp-auth-proxy/` in your slug.
 
-## Development
+The application is ready to run with `node index.js` and configured as your default web process.
 
-### Repository Structure
+## Compatibility
 
-```
-heroku-buildpack-mcp-auth-proxy/
-├── bin/
-│   ├── compile           # Main build script
-│   ├── detect            # App detection logic
-│   └── release           # Runtime configuration
-├── lib/                  # Library functions (TBD)
-│   ├── version-resolver.sh
-│   ├── downloader.sh
-│   └── installer.sh
-├── README.md
-└── CHANGELOG.md
-```
-
-### Testing
-
-The buildpack can be tested locally or with Heroku CLI:
-
-```bash
-# Test detection
-./bin/detect /path/to/test/app
-
-# Test compilation (requires Heroku environment)
-./bin/compile /path/to/build/dir /path/to/cache/dir /path/to/env/dir
-```
-
-## Contributing
-
-Please refer to the main MCP Remote Auth Proxy repository for contribution guidelines and development setup.
-
-## License
-
-This buildpack follows the same licensing as the main MCP Remote Auth Proxy project.
+- :white_check_mark: Cedar: Common Runtime
+- :white_check_mark: Cedar: Private Spaces
+- :white_check_mark: CI/CD pipelines
+- :x: Fir
