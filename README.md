@@ -6,9 +6,13 @@ Downloads and installs the [OAuth Proxy Remote MCP Servers](https://github.com/h
 
 ## Quick Setup
 
+Ensure that `mcp-remote-auth-proxy` is always the last buildpack so that its [default web process](bin/release) is launched.
+
 ```bash
-# Add the buildpack
-heroku buildpacks:set https://github.com/heroku/heroku-buildpack-mcp-auth-proxy
+# Install the required nodejs dependency
+heroku buildpacks:set --index 1 heroku/nodejs
+# Add the required buildpack
+heroku buildpacks:set --index 2 https://github.com/heroku/heroku-buildpack-mcp-auth-proxy
 
 # Pin to a specific version (recommended)
 heroku config:set MCP_PROXY_VERSION=v1.2.3
@@ -17,7 +21,7 @@ heroku config:set MCP_PROXY_VERSION=v1.2.3
 git push heroku main
 ```
 
-Your app now includes the MCP Auth Proxy application in the `mcp-auth-proxy/` directory.
+Your app now includes the MCP Auth Proxy application in the `mcp-auth-proxy/` directory and is configured as your default web process.
 
 ## Detection Logic
 
@@ -53,8 +57,6 @@ heroku config:set MCP_PROXY_DOWNLOAD_METHOD=git MCP_PROXY_GIT_REF=v2.0.0-beta
 ## Application Installation
 
 The buildpack installs the MCP Auth Proxy (Node) application to `/app/mcp-auth-proxy/` in your slug.
-
-The application is ready to run with `node index.js` and configured as your default web process.
 
 ## Compatibility
 
