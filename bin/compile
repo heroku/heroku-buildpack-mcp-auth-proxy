@@ -5,16 +5,31 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 
+# Ensure required directories exist
+mkdir -p "$CACHE_DIR"
+
 echo "-----> Installing MCP Auth Proxy"
 
-# Source library functions (to be implemented)
+# Read environment variables if ENV_DIR exists
+if [[ -d "$ENV_DIR" ]]; then
+  for env_var in MCP_PROXY_VERSION MCP_PROXY_DOWNLOAD_METHOD; do
+    if [[ -f "$ENV_DIR/$env_var" ]]; then
+      export $env_var=$(cat "$ENV_DIR/$env_var")
+    fi
+  done
+fi
+
+# Source library functions
 LIB_DIR="$(dirname $0)/../lib"
-# source "$LIB_DIR/version-resolver.sh"
-# source "$LIB_DIR/downloader.sh"
-# source "$LIB_DIR/installer.sh"
+source "$LIB_DIR/version-resolver.sh"
+source "$LIB_DIR/downloader.sh"
+source "$LIB_DIR/installer.sh"
 
-# Placeholder for main build process
-echo "-----> Repository structure initialized"
-echo "-----> Awaiting implementation of version resolution, download, and installation logic"
+# Execute build process
+resolve_version
+download_proxy
+install_proxy
 
-echo "-----> MCP Auth Proxy buildpack setup complete (placeholder)"
+echo "-----> MCP Auth Proxy installation complete"
+echo "       Version: $VERSION"
+echo "       Method: ${MCP_PROXY_DOWNLOAD_METHOD:-release}"
