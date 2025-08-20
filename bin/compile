@@ -12,7 +12,7 @@ echo "-----> Installing MCP Auth Proxy"
 
 # Read environment variables if ENV_DIR exists
 if [[ -d "$ENV_DIR" ]]; then
-  for env_var in MCP_PROXY_VERSION MCP_PROXY_DOWNLOAD_METHOD; do
+  for env_var in MCP_PROXY_DOWNLOAD_METHOD MCP_PROXY_VERSION MCP_PROXY_GIT_REF; do
     if [[ -f "$ENV_DIR/$env_var" ]]; then
       export $env_var=$(cat "$ENV_DIR/$env_var")
     fi
@@ -31,5 +31,9 @@ download_proxy
 install_proxy
 
 echo "-----> MCP Auth Proxy installation complete"
-echo "       Version: $VERSION"
-echo "       Method: ${MCP_PROXY_DOWNLOAD_METHOD:-release}"
+if [[ "${MCP_PROXY_DOWNLOAD_METHOD:-release}" == "git" ]]; then
+  echo "       Git Reference: $GIT_REF"
+else
+  echo "       Release Version: $VERSION"
+fi
+echo "       Download Method: ${MCP_PROXY_DOWNLOAD_METHOD:-release}"

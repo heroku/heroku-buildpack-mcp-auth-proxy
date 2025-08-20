@@ -8,7 +8,7 @@ download_proxy() {
       download_release "$VERSION"
       ;;
     "git")
-      clone_git_version "$VERSION"
+      clone_git_version "$GIT_REF"
       ;;
     *)
       echo "ERROR: Unknown download method: $method"
@@ -37,13 +37,13 @@ download_release() {
 }
 
 clone_git_version() {
-  local version=$1
+  local git_ref=$1
   local repo_url="https://github.com/heroku/mcp-remote-auth-proxy.git"
   local source_dir="$CACHE_DIR/source"
 
-  echo "-----> Cloning $repo_url at $version"
-  git clone --depth 1 --branch "$version" "$repo_url" "$source_dir" || {
-    echo "ERROR: Failed to clone version $version"
+  echo "-----> Cloning $repo_url at $git_ref"
+  git clone --depth 1 --branch "$git_ref" "$repo_url" "$source_dir" || {
+    echo "ERROR: Failed to clone git reference $git_ref"
     exit 1
   }
 
