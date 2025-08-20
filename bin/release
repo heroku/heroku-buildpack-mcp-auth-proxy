@@ -4,7 +4,7 @@
 cat << EOF
 ---
 default_process_types:
-  web: mcp-auth-proxy
+  web: node mcp-auth-proxy/index.js
 addons: []
 config_vars: {}
 EOF
