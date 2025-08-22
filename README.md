@@ -29,7 +29,7 @@ See the [deployment instructions](https://github.com/heroku/mcp-remote-auth-prox
 
 ```bash
 # Release method
-# Pin to tested release versions
+# Pin to tested release versions (https://github.com/heroku/mcp-remote-auth-proxy/releases)
 heroku config:set MCP_PROXY_VERSION=v1.2.3
 # Test latest stable release
 heroku config:set MCP_PROXY_VERSION=latest
@@ -44,7 +44,7 @@ heroku config:set MCP_PROXY_DOWNLOAD_METHOD=git MCP_PROXY_GIT_REF=v2.0.0-beta
 ```
 > [!NOTE]
 > - `MCP_PROXY_DOWNLOAD_METHOD` defaults to `release`
-> - `MCP_PROXY_VERSION` defaults to `latest` (the most recent stable release)
+> - `MCP_PROXY_VERSION` defaults to `latest` (the most recent [release](https://github.com/heroku/mcp-remote-auth-proxy/releases/latest))
 > - `MCP_PROXY_GIT_REF` defaults to `main` (if using the `git` download method)
 
 ## Application Installation

@@ -8,7 +8,7 @@ download_proxy() {
       download_release "$VERSION"
       ;;
     "git")
-      clone_git_version "$GIT_REF"
+      clone_git_ref "$GIT_REF"
       ;;
     *)
       echo "ERROR: Unknown download method: $method"
@@ -18,14 +18,14 @@ download_proxy() {
 }
 
 download_release() {
-  local version=$1
   local repo="heroku/mcp-remote-auth-proxy"
+  local version="$1"
 
   if [[ "$version" == "latest" ]]; then
-    local download_url="https://github.com/$repo/releases/latest/download/mcp-auth-proxy.tar.gz"
-  else
-    local download_url="https://github.com/$repo/releases/download/$version/mcp-auth-proxy.tar.gz"
+    version=$(get_latest_release_tag "$repo")
   fi
+
+  local download_url="https://github.com/$repo/archive/$version.tar.gz"
 
   echo "-----> Downloading from: $download_url"
   curl -L --fail --retry 3 "$download_url" | tar -xz -C "$CACHE_DIR" || {
@@ -33,15 +33,72 @@ download_release() {
     exit 1
   }
 
-  install_dependencies "$CACHE_DIR/mcp-auth-proxy"
+  # Find the extracted directory (GitHub archives extract to repo-name-version format)
+  local extracted_dir=$(find "$CACHE_DIR" -maxdepth 1 -name "mcp-remote-auth-proxy-*" -type d | head -1)
+  if [[ -z "$extracted_dir" ]]; then
+    echo "ERROR: Could not find extracted source directory"
+    exit 1
+  fi
+
+  install_dependencies "$extracted_dir"
+
+  # Move to expected location for installer
+  local target_dir="$CACHE_DIR/mcp-auth-proxy"
+  if [[ -d "$target_dir" ]]; then
+    rm -rf "$target_dir"
+  fi
+  mv "$extracted_dir" "$target_dir"
 }
 
-clone_git_version() {
+get_latest_release_tag() {
+  local repo=$1
+
+  # Make API request
+  local api_response=$(curl -s \
+    -H "Accept: application/vnd.github+json" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    --max-time 30 \
+    --retry 3 \
+    "https://api.github.com/repos/$repo/releases/latest" 2>/dev/null)
+
+  local curl_exit_code=$?
+
+  # Check if curl succeeded
+  # Check if the curl command failed (non-zero exit code indicates an error)
+  if [[ $curl_exit_code -ne 0 ]]; then
+    echo "ERROR: Failed to fetch latest release for $repo (curl exit code: $curl_exit_code)" >&2
+    return 1
+  fi
+
+  # Check for authentication errors
+  if echo "$api_response" | jq -e '.message' >/dev/null 2>&1; then
+    local error_msg=$(echo "$api_response" | jq -r '.message')
+
+    if [[ "$error_msg" == "Not Found" ]]; then
+      echo "ERROR: Repository $repo not found or private." >&2
+      echo "       For private repositories, install the GitHub netrc buildpack:" >&2
+      echo "       heroku buildpacks:add -i 1 https://github.com/heroku/heroku-buildpack-github-netrc.git" >&2
+      echo "       heroku config:set GITHUB_AUTH_TOKEN=<your_token>" >&2
+      return 1
+    else
+      echo "ERROR: GitHub API error for $repo: $error_msg" >&2
+      return 1
+    fi
+  fi
+
+  # Extract and validate tag_name
+  echo "$api_response" | jq -r '.tag_name'
+}
+
+clone_git_ref() {
   local git_ref=$1
   local repo_url="https://github.com/heroku/mcp-remote-auth-proxy.git"
   local source_dir="$CACHE_DIR/source"
 
-  echo "-----> Cloning $repo_url at $git_ref"
+  echo "-----> Cloning $repo_url at $git_ref into $source_dir"
+  if [[ -d "$source_dir" ]]; then
+    rm -rf "$source_dir"
+  fi
   git clone --depth 1 --branch "$git_ref" "$repo_url" "$source_dir" || {
     echo "ERROR: Failed to clone git reference $git_ref"
     exit 1
