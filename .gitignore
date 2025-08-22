@@ -6,3 +6,7 @@
 tasks/
 .claude/
 CLAUDE.md
+
+tests/test-app
+
+.env
