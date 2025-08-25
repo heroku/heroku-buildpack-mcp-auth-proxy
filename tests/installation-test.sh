@@ -75,7 +75,7 @@ setup_heroku_app() {
 	heroku buildpacks:add --index 1 https://github.com/heroku/heroku-buildpack-github-netrc.git
 	heroku buildpacks:set --index 2 heroku/nodejs
 	log_info "Setting buildpack for MCP Auth Proxy"
-	heroku buildpacks:add --index 3 https://github.com/heroku/heroku-buildpack-mcp-auth-proxy.git#"$CURRENT_BRANCH"
+	heroku buildpacks:set --index 3 https://github.com/heroku/heroku-buildpack-mcp-auth-proxy.git#"$CURRENT_BRANCH"
 }
 
 deploy_release_mode() {
