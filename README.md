@@ -36,6 +36,21 @@ Your app now includes the MCP Auth Proxy application in the `mcp-auth-proxy/` di
 
 With a new Heroku app, created in a Private Space, for an MCP Server repo like [mcp-heroku-com](https://github.com/heroku/mcp-heroku-com).
 
+### GITHUB_AUTH_TOKEN (Remove when this repo is made public)
+
+While this repository is still private, you will need to set the `GITHUB_AUTH_TOKEN` to a [personal access token (classic)](https://github.com/settings/tokens/new).
+
+1. Choose a unique token name
+2. Choose an expiration (30 days is fine)
+3. Select "Repo" from "Selected Scopes", Generate Token
+4. On the [Tokens](https://github.com/settings/tokens) page, select "Configure SSO"
+5. Select "heroku" from the list and authenticate it.
+6. Set the config variable:
+
+```
+heroku config:set GITHUB_AUTH_TOKEN=<github_pat_token>
+```
+
 ### Auth Proxy Base URL
 
 Set the base URL for the auth proxy to the public-facing https hostname of the Heroku app. Should be a custom domain name for real deployments. This is self-referential in auth flow redirect URIs:
