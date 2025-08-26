@@ -102,11 +102,6 @@ heroku config:set \
 1. [Auth Proxy Views Directory](https://github.com/heroku/mcp-remote-auth-proxy?tab=readme-ov-file#auth-proxy-views-directory)
 2. [Branding Customization](https://github.com/heroku/mcp-remote-auth-proxy?tab=readme-ov-file#branding-customization)
 
-> [!NOTE]
-> **Credential Handling with TLS**
->
-> While MCP Auth Proxy exists in a controlled environment via Private Space, developers may want to use their own self-signed certificates. To support this flexibility, the MCP Auth Proxy sets `rejectUnauthorized` to `false` for all TLS configuration settings.
-
 ## Version Control
 
 ```bash
