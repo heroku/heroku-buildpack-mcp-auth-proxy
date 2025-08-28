@@ -1,0 +1,15 @@
+{
+  "name": "example-http-mcp-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Minimal Streamable HTTP MCP server for Heroku buildpack demo",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.4",
+    "express": "^5.0.0"
+  }
+}
