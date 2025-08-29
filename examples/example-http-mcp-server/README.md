@@ -13,6 +13,21 @@ PORT=3000 npm start
 
 ## Heroku (with Auth Proxy buildpack)
 
+### One-time app setup on Heroku
+
+```bash
+# 1) Create app (in a Private Space)
+heroku apps:create <your-app> --space <your-private-space>
+
+# 2) Add Redis for session storage (alias ensures MCP_AUTH_PROXY_REDIS_URL is set)
+heroku addons:create heroku-redis:private-3 --as=MCP_AUTH_PROXY_REDIS -a <your-app>
+
+# 3) Buildpacks (if your MCP server repo is private, add netrc first; otherwise skip)
+heroku buildpacks:add --index 1 https://github.com/heroku/heroku-buildpack-github-netrc.git -a <your-app>
+heroku buildpacks:add --index 2 heroku/nodejs -a <your-app>
+heroku buildpacks:add --index 3 https://github.com/heroku/heroku-buildpack-mcp-auth-proxy -a <your-app>
+```
+
 Assuming this example directory is included in your Heroku slug (e.g. under `/app/examples/example-http-mcp-server`), set the following config with the Auth Proxy buildpack installed last:
 
 ```bash
