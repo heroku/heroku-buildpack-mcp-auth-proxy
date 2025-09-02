@@ -143,6 +143,25 @@ heroku config:set MCP_PROXY_DOWNLOAD_METHOD=git MCP_PROXY_GIT_REF=v2.0.0-beta
 
 The buildpack installs the MCP Auth Proxy (Node) application to `/app/mcp-auth-proxy/` in your slug.
 
+
+### Release Verification
+
+This buildpack sets up a default [Release Phase](https://devcenter.heroku.com/articles/release-phase) process for the app, which verifies that the build of the server will lauch with the runtime config variables, before the release is launched in the app.
+
+When Release Verification succeeds, the release log will end with:
+```
+Verified release launches. Exit status 0
+```
+…and then Heroku will launch the release.
+
+If the release fails, the release logs will show error message to help correct the issue. Push new commits, or retry the release using the [CLI command `heroku releases:retry`](https://devcenter.heroku.com/articles/heroku-cli-commands#heroku-releases-retry).
+
+If an app defines its own `release` process in `Procfile`, then this default behavior will be skipped. This verification may be added to a custom `release` process by adding the same command defined in this buildpack's [bin/release](bin/release):
+
+```bash
+MCP_AUTH_PROXY_VERIFY_RELEASE=true PORT=3001 node mcp-auth-proxy/index.js
+```
+
 ## Compatibility
 
 - :white_check_mark: Cedar: Common Runtime
