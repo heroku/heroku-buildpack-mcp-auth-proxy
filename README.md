@@ -36,7 +36,7 @@ Take the following steps to configure a new Heroku app created in a Private Spac
 
 ### Auth Proxy Base URL
 
-Set the base URL for the auth proxy to the public-facing https hostname of the Heroku app. The base URL is self-referential in auth flow redirect URIs. If you plan to deploy the app, use a [custom domain name](https://devcenter.heroku.com/articles/custom-domains).
+Set the base URL for the auth proxy to the public-facing HTTPS hostname of the Heroku app. The base URL is self-referential in auth flow redirect URIs. If you plan to deploy the app, use a [custom domain name](https://devcenter.heroku.com/articles/custom-domains).
 
 ```bash
 heroku config:set \
