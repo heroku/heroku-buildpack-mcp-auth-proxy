@@ -9,7 +9,7 @@ This buildpack adds an OAuth2.1/OIDC authentication proxy to your Heroku-hosted 
 Ensure that `mcp-remote-auth-proxy` is always the last buildpack so that its [default web process](bin/release) launches.
 
 ```bash
-# Key-Value store is required for clients and authorizations storage.
+# Key-Value Store is required for clients and authorizations storage.
 heroku addons:create heroku-redis:private-3 --as=MCP_AUTH_PROXY_REDIS
 
 # Install the Heroku .netrc buildpack (if installing from a private repository)
@@ -67,8 +67,8 @@ heroku config:set \
 
 Generate a new static OAuth client for the identity provider. This client's redirect URI origin must match the [Auth Proxy Base URL](#auth-proxy-base-url) (`BASE_URL`) origin.
 
-> Each identity provider has its own process/interface to create OAuth clients. Please see their documentation for instructions.
-Once created, set the client ID, secret, Identity Provider URL, and OAuth scope to be granted with config vars:
+> Each identity provider has its own process and interface to create OAuth clients. See their documentation for instructions.
+After creating it, set the client ID, secret, Identity Provider URL, and OAuth scope to be granted with config vars:
 
 ```bash
 heroku config:set \
@@ -80,7 +80,7 @@ heroku config:set \
 
 #### Non-OIDC Providers
 
-Optionally, for identity providers that do not support OIDC discovery,
+Optionally, for identity providers that don't support OIDC discovery,
 reference a [ServerMetadata JSON file](https://github.com/panva/openid-client/blob/v6.x/docs/interfaces/ServerMetadata.md) that contains the `"issuer"`, `"authorization_endpoint"`, `"token_endpoint"`, and `"scopes_supported"` fields.
 
 ### Customization
