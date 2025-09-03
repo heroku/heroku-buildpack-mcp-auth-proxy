@@ -4,7 +4,7 @@ This [Heroku buildpack](https://devcenter.heroku.com/articles/buildpacks) instal
 
 ## Quick Setup
 
-This buildpack adds an OAuth2.1/OIDC authentication proxy to your Heroku-hosted Remote MCP Server ([Private Spaces](https://devcenter.heroku.com/articles/private-spaces) are required).
+This buildpack adds an OAuth2.1/OIDC authentication proxy to your Heroku-hosted Remote MCP Server. You can only use this buildpack in [Private Space](https://devcenter.heroku.com/articles/private-spaces) apps.
 
 Ensure that `mcp-remote-auth-proxy` is always the last buildpack so that its [default web process](bin/release) launches.
 
