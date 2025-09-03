@@ -70,7 +70,7 @@ setup_heroku_app() {
 	heroku create "$app_name" --team "$team_name"
 	log_info "Setting config variables"
 	# Set config variables
-	heroku config:set -a "$app_name" BASE_URL=https://mcp-heroku-com-with-auth-proxy-5f63807b3fb0.herokuapp.com GITHUB_AUTH_TOKEN="$GITHUB_AUTH_TOKEN"
+	heroku config:set -a "$app_name" BASE_URL=https://example-mcp-server-with-auth-proxy-5f63807b3fb0.herokuapp.com GITHUB_AUTH_TOKEN="$GITHUB_AUTH_TOKEN"
 	log_info "Setting buildpacks"
 	heroku buildpacks:add --index 1 https://github.com/heroku/heroku-buildpack-github-netrc.git
 	heroku buildpacks:set --index 2 heroku/nodejs
