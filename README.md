@@ -12,12 +12,10 @@ Ensure that `mcp-remote-auth-proxy` is always the last buildpack so that its [de
 # Key-Value Store is required for clients and authorizations storage.
 heroku addons:create heroku-redis:private-3 --as=MCP_AUTH_PROXY_REDIS
 
-# Install the Heroku .netrc buildpack (if installing from a private repository)
-heroku buildpacks:add --index 1 https://github.com/heroku/heroku-buildpack-github-netrc.git
 # Install the required nodejs dependency
-heroku buildpacks:set --index 2 heroku/nodejs
+heroku buildpacks:set --index 1 heroku/nodejs
 # Add the buildpack last
-heroku buildpacks:set --index 3 https://github.com/heroku/heroku-buildpack-mcp-auth-proxy
+heroku buildpacks:set --index 2 https://github.com/heroku/heroku-buildpack-mcp-auth-proxy
 
 # Pin to a specific version (recommended)
 heroku config:set MCP_PROXY_VERSION=v1.2.3
