@@ -17,7 +17,7 @@ heroku buildpacks:set --index 1 heroku/nodejs
 # Add the buildpack last
 heroku buildpacks:set --index 2 https://github.com/heroku/heroku-buildpack-mcp-auth-proxy
 
-# Pin to a specific version (recommended)
+# Pin to a specific version
 heroku config:set MCP_PROXY_VERSION=v1.2.3
 
 # Configure the auth proxy
