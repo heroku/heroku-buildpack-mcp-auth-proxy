@@ -19,9 +19,6 @@ heroku buildpacks:set --index 1 heroku/nodejs
 # Add the buildpack last
 heroku buildpacks:set --index 2 https://github.com/heroku/heroku-buildpack-mcp-auth-proxy
 
-# Pin to a specific version
-heroku config:set MCP_PROXY_VERSION=v1.2.3
-
 # Configure the auth proxy
 
 # Deploy 🚀
@@ -93,7 +90,7 @@ reference a [ServerMetadata JSON file](https://github.com/panva/openid-client/bl
 ```bash
 # Release method
 # Pin to tested release versions (https://github.com/heroku/mcp-remote-auth-proxy/releases)
-heroku config:set MCP_PROXY_VERSION=v1.2.3
+heroku config:set MCP_PROXY_VERSION=v1.1.0
 # Test latest stable release
 heroku config:set MCP_PROXY_VERSION=latest
 
