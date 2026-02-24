@@ -4,7 +4,9 @@ This [Heroku buildpack](https://devcenter.heroku.com/articles/buildpacks) instal
 
 ## Quick Setup
 
-This buildpack adds an OAuth2.1/OIDC authentication proxy to your Heroku-hosted Remote MCP Server. You can only use this buildpack in [Private Space](https://devcenter.heroku.com/articles/private-spaces) apps.
+This buildpack is compatible with Cedar generation apps, in Heroku Common Runtime or Private Spaces. 
+
+We recommend [Private Spaces](https://devcenter.heroku.com/articles/private-spaces) for production deployments, due to the enhanced security profile of private apps and datastores.
 
 Ensure that `mcp-remote-auth-proxy` is always the last buildpack so that its [default web process](bin/release) launches.
 
@@ -16,9 +18,6 @@ heroku addons:create heroku-redis:private-3 --as=MCP_AUTH_PROXY_REDIS
 heroku buildpacks:set --index 1 heroku/nodejs
 # Add the buildpack last
 heroku buildpacks:set --index 2 https://github.com/heroku/heroku-buildpack-mcp-auth-proxy
-
-# Pin to a specific version (recommended)
-heroku config:set MCP_PROXY_VERSION=v1.2.3
 
 # Configure the auth proxy
 
@@ -91,7 +90,7 @@ reference a [ServerMetadata JSON file](https://github.com/panva/openid-client/bl
 ```bash
 # Release method
 # Pin to tested release versions (https://github.com/heroku/mcp-remote-auth-proxy/releases)
-heroku config:set MCP_PROXY_VERSION=v1.2.3
+heroku config:set MCP_PROXY_VERSION=v1.1.0
 # Test latest stable release
 heroku config:set MCP_PROXY_VERSION=latest
 
